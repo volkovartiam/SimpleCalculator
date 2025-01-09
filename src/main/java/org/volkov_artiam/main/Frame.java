@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -59,7 +58,7 @@ public class Frame extends JFrame {
         scrollExp.setBounds(10, 30, 280, 70);
         panel.add(scrollExp);
         scrollExp.setViewportView(textAreaExp);
-        textAreaExp.setText("1+1");
+        textAreaExp.setText("1.0+1.0");
 
         JScrollPane scrollResult = new JScrollPane();
         scrollResult.setBounds(10, 130, 280, 70);
@@ -99,9 +98,7 @@ public class Frame extends JFrame {
         textAreaResult.append("Answer = " + answer);
     }
 
-    public void setSteps(ArrayList<String> calculatorSteps) {
-        for(String step : calculatorSteps) {
-            textAreaResult.append(step + "\n");
-        }
+    public void setSteps(String calculatorSteps) {
+        textAreaResult.append(calculatorSteps);
     }
 }

@@ -28,7 +28,6 @@ public class Parser {
     private void setDefaultOperatorsPatterns() {
     	operatorsPatterns.add("\\+");
     	operatorsPatterns.add("\\*");
-    	//operatorsPatterns.add("\\d+");		исправить валидатор 15 -> 15.0
     	operatorsPatterns.add("\\d+\\.\\d+");
     }
     
@@ -41,7 +40,7 @@ public class Parser {
      * Добавить исключение по времени
      * Добавить переопределение toString
      * */
-    void parse(String input) throws IllegalStateException{
+    List<String> parse(String input) throws IllegalStateException{
         eqList.clear();
         unknownsList.clear();
     	
@@ -55,6 +54,7 @@ public class Parser {
         	input = parsedByPatterns(input, sortedPatterns);
             checkMaxTime(startTime, System.currentTimeMillis());
         }
+        return eqList; 
     }
 
     /*

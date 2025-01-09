@@ -2,37 +2,35 @@ package org.volkov_artiam.main.parser;
 
 import java.util.List;
 
-import org.volkov_artiam.operators.Operators;
+import org.volkov_artiam.operators.OperatorsFeatures;
 
-class ValidatedParser extends Parser {
+public class ValidatedParser extends Parser implements Operators{
 
-    /* переписать для исключения связи с операторами
-     * 
-     */
-    Operators ops = new Operators();
-    Parser parser;
-    SpacesRemover spacesRemover;
+    public OperatorsFeatures operators = new OperatorsFeatures();
+    Parser parser = new Parser();
+    SpacesRemover spacesRemover = new SpacesRemover();
 
     public ValidatedParser(){
-    	parser = new Parser();
-    	spacesRemover = new SpacesRemover();
+    	parser.setOperatorsPatternsList(operators.getPatternsList() );
     }
-    
-    @Override
-    void setOperatorsPatternsList(List<String> operatorsPatterns) {
-    	super.setOperatorsPatternsList(operatorsPatterns);
+       
+    public List<String> parse(String input){
+    	List<String> eqList = null;
+    	if(isValidString(input) ) {
+    		eqList = parser.parse(input);
+    	}
+    	return eqList;
     }
-    
     
     // Проверка правильности записи операторов
     public boolean isValidString(String input) throws IllegalArgumentException {
-
     	input = spacesRemover.removeSpaces(input);
-        parser.parse(input);
-        List<String> eqList = parser.getEqList();
+        List<String> eqList = parser.parse(input);
         List<String> unknownsList = parser.getUknownsList();
         
-        checkUnknowns(unknownsList);
+        if(unknownsList.size() > 0) {
+            throw new IllegalArgumentException("Mistake №1 имееются неизвестные символы");
+        }
         checkBrackets(eqList);
 
         for(int i = 0; i < eqList.size(); i++ ) {
@@ -52,50 +50,49 @@ class ValidatedParser extends Parser {
             	before_previous = eqList.get(i - 2); 
             }
 
-            checkEmptyBrackets(ops.isBrackOpen(current), ops.isBrackClosed(next) );
-            checkTwoOperatorsNear(ops.isBinary(current), ops.isBinary(next) );
-            checkSymbolBetweenBracketsAndNumbers(ops.isNumber(current), ops.isBrackOpen(next) );
-
+    		if(isBrackOpen(current) & isBrackClosed(next) ) {
+    		    throw new IllegalArgumentException("Mistake №3 выражение состоит из пустых скобок"  );
+    		}
             
-
-            //отсутствие символа между скобкой и числом )4
-            if(ops.isBrackClosed(current) & ops.isNumber(next) ) {
+	    	if(isBinary(current) & isBinary(next) )  {
+	    		throw new IllegalArgumentException("Mistake №4 два бинарных оператора рядом"  );
+	    	}
+    		
+            if(isNumber(current) & isBrackOpen(next)) {
+                throw new IllegalArgumentException("Mistake №5 отсутствие символа между числом и скобкой"  );
+	        }
+	    	
+            if(isBrackClosed(current) & isNumber(next) ) {
                 throw new IllegalArgumentException("Mistake №6 отсутствие символа между скобкой и числом"  );
             }
 
-            // число или оператор в скобке
-            if( !ops.isUnary(before_previous) &  ops.isBrackOpen(previous) & ( ops.isMathOps(current) )  & ops.isBrackClosed(next) ) {
+            if( !isUnary(before_previous) &  isBrackOpen(previous) & ( isMathOps(current) )  & isBrackClosed(next) ) {
                 throw new IllegalArgumentException("Mistake №7 число или оператор в скобке"  );
             }
 
-            // бинарный оператор заканчивается скобкой
-            if( ops.isBinary(current)  &  ops.isBrackClosed(next)  ) {
+            if( isBinary(current)  &  isBrackClosed(next)  ) {
                 throw new IllegalArgumentException("Mistake №8.1 бинарный оператор заканчивается скобкой"  );
             }
 
-            // бинарный оператор заканчивается в конце выражения
-            if( ops.isBinary(current)  & (i == eqList.size() - 1)    ) {
+       // Уточнить на этапе тестирования     
+            if( isBinary(current)  & (i == eqList.size() - 1)    ) {
                 throw new IllegalArgumentException("Mistake №8.2 бинарный оператор заканчивается без цифры"  );
             }
 
-
-            // синус не со скобкой
-            if( ops.isSin(current)  &  !ops.isBrackOpen(next) ) {
+            if( isSin(current)  &  !isBrackOpen(next) ) {
                 throw new IllegalArgumentException("Mistake №9 синус не со скобкой"  );
             }
 
-            // число и сразу унарный оператор
-            if( ops.isNumber(current)  &  ops.isUnary(next) ) {
+            if( isNumber(current)  &  isUnary(next) ) {
                 throw new IllegalArgumentException("Mistake №10 число и сразу унарный оператор"  );
             }
 
-            // оператор рядом с унарным оператором в начале строки
-            if( ops.isBinary(current) & ops.isUnary(next) & (i == 0)   ) {
+        // Уточнить на этапе тестирования  
+            if( isBinary(current) & isUnary(next) & (i == 0)   ) {
                 throw new IllegalArgumentException("Mistake №11 оператор рядом с унарным оператором в начале строки"  );
             }
 
-            // оператор рядом с унарным оператором после открывающейся скобки
-            if( ops.isBinary(current) & ops.isUnary(next) & ops.isBrackOpen(previous)  ) {
+            if( isBinary(current) & isUnary(next) & isBrackOpen(previous)  ) {
                 throw new IllegalArgumentException("Mistake №12 оператор рядом с унарным оператором после скобки"  );
             }
         }
@@ -103,37 +100,15 @@ class ValidatedParser extends Parser {
     }
 
     
-    //отсутствие символа между числом и скобкой 4(
-    void checkSymbolBetweenBracketsAndNumbers(boolean current, boolean next) {
-        if(current & next) {
-            throw new IllegalArgumentException("Mistake №5 отсутствие символа между числом и скобкой"  );
-        }
-    }
-    
-    
-    // два бинарных оператора рядом
-    void checkTwoOperatorsNear(boolean current, boolean next) {
-    	if(current & next )  {
-    		throw new IllegalArgumentException("Mistake №4 два бинарных оператора рядом"  );
-    	}
-    }
-        
-	// выражение состоит из пустых скобок
-	void checkEmptyBrackets(boolean current, boolean next) {
-		if(current & next) {
-		    throw new IllegalArgumentException("Mistake №3 выражение состоит из пустых скобок"  );
-		}
-	}
-	
     // проверка количества открытых и закрытых скобок
 	void checkBrackets(List<String> eqList) {
         int countOpen = 0;
         int countClosed = 0;
 
         for(String eqPart : eqList) {
-            if(ops.isBrackOpen(eqPart)) {
+            if(operators.isBrackOpen(eqPart)) {
                 countOpen++;
-            } else if(ops.isBrackClosed(eqPart)  ) {
+            } else if(operators.isBrackClosed(eqPart)  ) {
                 countClosed++;
             }
         }
@@ -142,11 +117,70 @@ class ValidatedParser extends Parser {
         } 
 	}
 	
-    // Проверка наличия неизвестных символов
-	void checkUnknowns(List<String> unknownsList) {
-        if(unknownsList.size() > 0) {
-            throw new IllegalArgumentException("Mistake №1 имееются неизвестные символы");
-        }
+
+	@Override
+	public boolean isNumber(String exp) {
+		return operators.isNumber(exp);
+	}
+
+	@Override
+	public boolean isBrackOpen(String exp) {
+		return operators.isBrackOpen(exp);
+	}
+
+	@Override
+	public boolean isBrackClosed(String exp) {
+		return operators.isBrackClosed(exp);
+	}
+
+	@Override
+	public boolean isBrack(String exp) {
+		return operators.isBrack(exp);
+	}
+
+	@Override
+	public boolean isSum(String exp) {
+		return operators.isSum(exp);
+	}
+
+	@Override
+	public boolean isSub(String exp) {
+		return operators.isSub(exp);
+	}
+
+	@Override
+	public boolean isMult(String exp) {
+		return operators.isMult(exp);
+	}
+
+	@Override
+	public boolean isDiv(String exp) {
+		return operators.isDiv(exp);
+	}
+
+	@Override
+	public boolean isSin(String exp) {
+		return operators.isSin(exp);
+	}
+
+	@Override
+	public boolean isUnary(String exp) {
+		return operators.isUnary(exp);
+	}
+
+	@Override
+	public boolean isBinary(String exp) {
+		return operators.isBinary(exp);
+	}
+
+	@Override
+	public boolean isMathOps(String exp) {
+		return operators.isMathOps(exp);
+	}
+
+	@Override
+	public boolean isOperator(String exp) {
+		return operators.isOperator(exp);
 	}
     
 

@@ -1,24 +1,10 @@
 package org.volkov_artiam.operators;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+public class NumberFractional extends Operator{
 
-public class NumberFractional implements Operator{
-
-    String pattern = "\\d+\\.\\d+";
-    int priority = 10;
-
-    public boolean isFindedWithPatternIn(String exp) {
-        Pattern pat = Pattern.compile(pattern);
-        Matcher matcher = pat.matcher(exp);
-        return matcher.find();
+    public NumberFractional() {
+    	super.setPattern("\\d+\\.\\d+");
+    	super.setPriority(10);
     }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public String getPattern() {
-        return pattern;
-    }
+    
 }

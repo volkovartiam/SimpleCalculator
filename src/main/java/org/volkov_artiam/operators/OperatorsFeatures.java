@@ -2,11 +2,10 @@ package org.volkov_artiam.operators;
 
 import java.util.ArrayList;
 
-public class Operators {
+public class OperatorsFeatures {
 
     public ArrayList<Operator> operators = new ArrayList<>();
 
-    Operator number = new Number();
     Operator numberFractional = new NumberFractional();
 
     Operator bracketOpened = new BracketOpened();
@@ -19,9 +18,8 @@ public class Operators {
 
     Operator sin = new Sin();
 
-    public Operators(){
+    public OperatorsFeatures(){
         operators.add(numberFractional);
-        operators.add(number);
 
         operators.add(bracketOpened);
         operators.add(bracketClosed);
@@ -36,7 +34,7 @@ public class Operators {
     }
 
     public boolean isNumber(String exp) {
-        return number.isFindedWithPatternIn(exp) || numberFractional.isFindedWithPatternIn(exp) ;
+        return numberFractional.isFindedWithPatternIn(exp) ;
     }
 
 
@@ -76,7 +74,7 @@ public class Operators {
     }
 
 
-    public ArrayList<String> getOperatorsPatternsList(){
+    public ArrayList<String> getPatternsList(){
         ArrayList<String> operatorPattrens = new ArrayList<>();
         for(Operator operator : operators ) {
             operatorPattrens.add(operator.getPattern());

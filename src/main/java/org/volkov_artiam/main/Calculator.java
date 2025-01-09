@@ -1,82 +1,84 @@
 package org.volkov_artiam.main;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
-import org.volkov_artiam.operators.Operators;
+
+import org.volkov_artiam.main.parser.PostfixConverter;
 
 public class Calculator {
 
-    Operators ops = new Operators();
-    ArrayList<String> calculatorSteps = new ArrayList<>();
+	PostfixConverter converter; 	
+    List<String> calculatorSteps;
     String answer = "";
+    int counter = 0;
+    
+    public Calculator() {
+    	converter = new PostfixConverter();
+    	calculatorSteps = new ArrayList<>();
+	}
 
     public void calculate(String exp) {
-
-        Converter converter = new Converter();
-        converter.validConvertToPostFix(exp);
-        ArrayList<String> postfixExpr = converter.getPostFix();
-        //System.out.println("Выражение в постфиксном виде " + postfixExpr );
-
+        List<String> postfix = converter.convertToPostfix(exp);
+        
         Stack<Double> stackDouble = new Stack<Double>();
-        int counter = 0;
-
-        for(String eqPart : postfixExpr) {
-            if(ops.isNumber(eqPart)) {
-                stackDouble.push( (Double) Double.valueOf(eqPart)  );
+        for(String eqPart : postfix) {
+            if(converter.isNumber(eqPart)) {
+                stackDouble.push(Double.parseDouble(eqPart) );
             }
-
-            else if (ops.isOperator(eqPart) ) {
+            else if (converter.isOperator(eqPart) ) {
                 if(!stackDouble.isEmpty() ) {
                     double first = stackDouble.pop();
 
-                    if(ops.isUnary(eqPart) ) {
+                    if(converter.isUnary(eqPart) ) {
                         double result = Execute(eqPart, first);
 
-                        String step =  counter + ")" + first +  eqPart + "=" + result;
-                        calculatorSteps.add(step);
+                        addStep(String.valueOf(first), eqPart, "=", String.valueOf(result) );
 
                         stackDouble.push(result);
                         counter++;
-
                     } else {
                         double second  = stackDouble.pop();
                         double result = Execute(eqPart, first, second);
 
-                        String step =  counter + ")" + second +  eqPart + first + "=" + result;
-                        calculatorSteps.add(step);
-
+                        addStep(String.valueOf(second), eqPart, String.valueOf(first), "=", String.valueOf(result) );
+                        
                         stackDouble.push(result);
                         counter++;
                     }
                 }
             }
         }
-
         if( !stackDouble.isEmpty() ) {
             answer = stackDouble.pop().toString();
         }
-		/*
-		for(String step : calculatorSteps) {
-			System.out.println(step);
-		}
-		*/
     }
 
 
+	private void addStep(String ... strings) {
+		String output = counter + ")";
+		for (String string : strings) {
+			output += string;
+		}
+		output += "\n";
+		calculatorSteps.add(output);
+	}
+
+    
     double Execute(String operation, double first, double second)  {
-        if( ops.isSum(operation) ) {
+        if( converter.isSum(operation) ) {
             return first + second;
         }
 
-        if( ops.isSub(operation) ) {
+        if( converter.isSub(operation) ) {
             return second - first;
         }
 
-        if( ops.isMult(operation) ) {
+        if( converter.isMult(operation) ) {
             return first * second;
         }
 
-        if( ops.isDiv(operation) ) {
+        if( converter.isDiv(operation) ) {
             if(first == 0) {
                 throw new IllegalArgumentException("Деление на ноль не возможно");
             }
@@ -88,7 +90,7 @@ public class Calculator {
 
 
     double Execute(String operation, double first) throws IllegalArgumentException {
-        if( ops.isSin(operation) ) {
+        if( converter.isSin(operation) ) {
             return Math.sin(first);
         } else {
             throw new IllegalArgumentException("Неизвестное выражение с унарным оператором");
@@ -99,8 +101,12 @@ public class Calculator {
         return answer;
     }
 
-    public ArrayList<String> getSteps() {
-        return calculatorSteps;
+    public String getSteps() {
+    	String output = "";
+    	for (String string : calculatorSteps) {
+    		output += string;
+		}
+        return output;
     }
 
 }

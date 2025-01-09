@@ -1,4 +1,4 @@
-package org.volkov_artiam.main;
+package org.volkov_artiam.main.parser;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
@@ -6,22 +6,23 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class ValidatorTest {
+class ValidatedParserTest {
 
+	
     @Test
     void testIsValidStringWithoutUknownSymbolsTrueCase() {
         boolean hasUknownSymbols = false;
-        String[] input = {  "123.123+123" ,
-                "1-5",
-                "(3.7/15)" ,
-                "(3.7*15)",
-                "sin(3.7*15/1+sin(1))",
-                "sin(15)",
-                "(3.7*15+12/12)",
-                "sin(3.7*15)"			};
+        String[] input = {  "123.123+123.0" ,
+                "1.0-5.0",
+                "(3.7/15.0)" ,
+                "(3.7*15.0)",
+                "sin(3.7*15.0/1.0+sin(1.0))",
+                "sin(15.0)",
+                "(3.7*15.0+12.0/12.0)",
+                "sin(3.7*15.0)"			};
         for(String i : input) {
-            Validator validator = new Validator();
-            hasUknownSymbols = validator.isValidString( i );
+            ValidatedParser parser = new ValidatedParser();
+            hasUknownSymbols = parser.isValidString( i );
             assertTrue(hasUknownSymbols);
         }
     }
@@ -30,16 +31,16 @@ class ValidatorTest {
     @Test
     void testIsValidStringWithoutUknownSymbolsFalseCase() {			// Mistake №1 имееются неизвестные символы
         boolean hasUknownSymbols = true;
-        String[] input = { "!123.123+123" ,
-                "tan1-5",
-                "(yut3.7/15)" ,
-                "(3.7*15)p",
-                "arsin(3.7*15)"  };
+        String[] input = { "!123.123+123.0" ,
+                "tan1.0-5.0",
+                "(yut3.7/15.0)" ,
+                "(3.7*15.0)p",
+                "arsin(3.7*15.0)"  };
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //hasUknownSymbols =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(hasUknownSymbols);
         }
     }
@@ -55,10 +56,10 @@ class ValidatorTest {
                 "((12+45.45)" ,
                 "(12+45.45))"  };
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
@@ -71,15 +72,16 @@ class ValidatorTest {
                 "(())",
                 "(12+5+(()))"  };
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
+	
 
-
+	
     @Test
     void testIsValidStringWithTwoBinaryOperatorsFalseCase() {
         boolean isValidString = true;
@@ -91,10 +93,10 @@ class ValidatorTest {
                 "1//1" 	,
                 "1*/8" 	 	};
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
@@ -106,10 +108,10 @@ class ValidatorTest {
         String[] input = { 	"3.7(1+2)" , 						// "Mistake 5 отсутствие символа между числом и скобкой"  );
                 "(3.7(1+2))" 	};
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
@@ -121,10 +123,10 @@ class ValidatorTest {
         String[] input = { 	"(1+2)3.7" , 						// "Mistake 6 отсутствие символа между скобкой и числом"  );
                 "((1+2)3.7)" 	};
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
@@ -138,10 +140,10 @@ class ValidatorTest {
                 "12+(3)+45" ,
                 "(1)" 			};
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
@@ -156,10 +158,10 @@ class ValidatorTest {
                 "(5-)" 	,
                 "(1+)" 		};
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
@@ -173,10 +175,10 @@ class ValidatorTest {
                 "5-6+" 	,
                 "1+" 		};
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
@@ -189,10 +191,10 @@ class ValidatorTest {
                 "sin5+5" ,
                 "sin+5" 	};
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
@@ -205,10 +207,10 @@ class ValidatorTest {
                 "5sin(3.7)+5" ,
                 "1+1sin(5)" 	};
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
@@ -222,10 +224,10 @@ class ValidatorTest {
                 "/sin(3.7)+5" ,
                 "*sin(5)-1" 	};
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
@@ -239,10 +241,10 @@ class ValidatorTest {
                 "(/sin(3.7)+5)" ,
                 "(*sin(5)-1)" 	};
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
     }
@@ -259,10 +261,10 @@ class ValidatorTest {
                 "1*sin" 	};
         //		"1*sin(12)" 	};
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);;
         }
     }
@@ -272,41 +274,44 @@ class ValidatorTest {
     @Test
     void isEmpty() {
         String input = "";
-        Validator validator = new Validator();
-        assertThrows( IllegalArgumentException.class, ()-> validator.isValidString(input) );
+        ValidatedParser parser = new ValidatedParser();
+        assertThrows( IllegalArgumentException.class, ()-> parser.isValidString(input) );
     }
 
     @Test
     void isNull() {
         String input = null;
-        Validator validator = new Validator();
-        assertThrows( NullPointerException.class, ()-> validator.isValidString(input) );
+        ValidatedParser parser = new ValidatedParser();
+        assertThrows( NullPointerException.class, ()-> parser.isValidString(input) );
     }
 
     @Test
     void testIsAllBracketsTrueCase() {
         boolean hasValidBrackets = false;
-        String[] input = { "23.123+123" , "1-5", "(3.7/15)" , "(3.7*15)", "sin(3.7*15)" };
+        String[] input = { "23.123+123.0" , "1.0-5.0", "(3.7/15.0)" , "(3.7*15.0)", "sin(3.7*15.0)" };
 
         for(String i : input) {
-            Validator validator = new Validator();
-            hasValidBrackets = validator.isValidString( i );
+        	ValidatedParser parser = new ValidatedParser();
+            hasValidBrackets = parser.isValidString( i );
             assertTrue(hasValidBrackets);
         }
     }
 
-
+    
     @Test
     void testIsAllBracketsFalseCase() {
+    	
         boolean hasValidBrackets = false;
         String[] input = { "123.123+123(" , "1-5)", "(3.7/15)(" , "(3.7*15))", "(sin(3.7*15)" };
 
         for(String i : input) {
-            Validator validator = new Validator();
+        	ValidatedParser parser = new ValidatedParser();
             assertThrows( IllegalArgumentException.class,
                     //isValidString =
-                    () -> validator.isValidString( i )  );
+                    () -> parser.isValidString( i )  );
             //assertFalse(isValidString);
         }
+        
     }
+
 }

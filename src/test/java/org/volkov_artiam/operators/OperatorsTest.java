@@ -8,13 +8,12 @@ import org.junit.jupiter.api.Test;
 
 class OperatorsTest {
 
-    Operators ops = new Operators();
+    OperatorsFeatures ops = new OperatorsFeatures();
 
     @Test
     void testIsNumberTrue() {
-
-        assertTrue(ops.isNumber("123.") );
-        assertTrue(ops.isNumber("123+") );
+        assertTrue(ops.isNumber("123.0") );
+        assertTrue(ops.isNumber("01.0") );
         assertTrue(ops.isNumber("123.4564") );
     }
 
@@ -40,7 +39,7 @@ class OperatorsTest {
     void testGetOperatorsPatternsList() {
         ArrayList<String> actualPatternsList = new ArrayList<>();
         actualPatternsList.add("\\d+\\.\\d+");		// NumberFractional
-        actualPatternsList.add("\\d+");				// Number
+        //actualPatternsList.add("\\d+");				// Number
 
         actualPatternsList.add("\\(");				// BracketOpened
         actualPatternsList.add("\\)");				// BracketClosed
@@ -52,7 +51,7 @@ class OperatorsTest {
 
         actualPatternsList.add("sin");				// Sin
 
-        ArrayList<String> expectedPatternsList = ops.getOperatorsPatternsList() ;
+        ArrayList<String> expectedPatternsList = ops.getPatternsList() ;
         assertEquals(expectedPatternsList, actualPatternsList);
     }
 
