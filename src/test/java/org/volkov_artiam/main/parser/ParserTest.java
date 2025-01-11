@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
-import org.volkov_artiam.operators.OperatorsFeatures;
+import org.volkov_artiam.operators.AllOperators;
 
 class ParserTest {
 
@@ -31,7 +31,7 @@ class ParserTest {
 
         String input = "1.0-5.0" ;
         Parser parser = new Parser();
-        parser.setOperatorsPatternsList(new OperatorsFeatures().getPatternsList() );
+        parser.setOperatorsPatternsList(new AllOperators().getPatternsList() );
         parser.parse(input);
 
         ArrayList<String> expected = new ArrayList<>();
@@ -48,7 +48,7 @@ class ParserTest {
 
         String input = "3.7/15.0-4.0" ;
         Parser parser = new Parser();
-        parser.setOperatorsPatternsList(new OperatorsFeatures().getPatternsList() );
+        parser.setOperatorsPatternsList(new AllOperators().getPatternsList() );
         parser.parse(input);
 
         ArrayList<String> expected = new ArrayList<>();
@@ -67,7 +67,7 @@ class ParserTest {
 
         String input = "(45.0*45.0)" ;
         Parser parser = new Parser();
-        parser.setOperatorsPatternsList(new OperatorsFeatures().getPatternsList() );
+        parser.setOperatorsPatternsList(new AllOperators().getPatternsList() );
         parser.parse(input);
 
         ArrayList<String> expected = new ArrayList<>();
@@ -86,7 +86,7 @@ class ParserTest {
 
         String input = "sin(3.7*15.0)";
         Parser parser = new Parser();
-        parser.setOperatorsPatternsList(new OperatorsFeatures().getPatternsList() );
+        parser.setOperatorsPatternsList(new AllOperators().getPatternsList() );
         parser.parse(input);
 
         ArrayList<String> expected = new ArrayList<>();
@@ -123,7 +123,7 @@ class ParserTest {
     void testParseWithUknownSymbolsCaseTwo() {
         String input = "1.0-5.0xx" ;
         Parser parser = new Parser();
-        parser.setOperatorsPatternsList(new OperatorsFeatures().getPatternsList() );
+        parser.setOperatorsPatternsList(new AllOperators().getPatternsList() );
         parser.parse(input);
 
         ArrayList<String> expectedOperators = new ArrayList<>();
@@ -142,7 +142,7 @@ class ParserTest {
     void testParseWithUknownSymbolsCaseThree() {
         String input = "3.7/==15.0-4.0" ;
         Parser parser = new Parser();
-        parser.setOperatorsPatternsList(new OperatorsFeatures().getPatternsList() );
+        parser.setOperatorsPatternsList(new AllOperators().getPatternsList() );
         parser.parse(input);
 
         ArrayList<String> expectedOperators = new ArrayList<>();
@@ -167,7 +167,7 @@ class ParserTest {
 
         String input = "u(x45.0c*45.0)" ;
         Parser parser = new Parser();
-        parser.setOperatorsPatternsList(new OperatorsFeatures().getPatternsList() );
+        parser.setOperatorsPatternsList(new AllOperators().getPatternsList() );
         parser.parse(input);
 
         ArrayList<String> expectedOperators = new ArrayList<>();
@@ -195,7 +195,7 @@ class ParserTest {
 
         String input = "siin(3.7*15.0)" ;
         Parser parser = new Parser();
-        parser.setOperatorsPatternsList(new OperatorsFeatures().getPatternsList() );
+        parser.setOperatorsPatternsList(new AllOperators().getPatternsList() );
         parser.parse(input);
 
         ArrayList<String> expectedOperators = new ArrayList<>();

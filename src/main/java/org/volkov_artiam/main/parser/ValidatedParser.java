@@ -2,19 +2,23 @@ package org.volkov_artiam.main.parser;
 
 import java.util.List;
 
-import org.volkov_artiam.operators.OperatorsFeatures;
+import org.volkov_artiam.operators.AllOperators;
 
-public class ValidatedParser extends Parser implements Operators{
+public class ValidatedParser extends Parser implements IOperators{
 
-    public OperatorsFeatures operators = new OperatorsFeatures();
+    public AllOperators operators = new AllOperators();
     Parser parser = new Parser();
-    SpacesRemover spacesRemover = new SpacesRemover();
+    public SpacesRemover spacesRemover = new SpacesRemover();
+    public StringPreparer preparer = new StringPreparer();
 
     public ValidatedParser(){
     	parser.setOperatorsPatternsList(operators.getPatternsList() );
     }
        
     public List<String> parse(String input){
+    	input = spacesRemover.removeSpaces(input);
+    	input = preparer.convert(input);
+    	System.out.println(input);
     	List<String> eqList = null;
     	if(isValidString(input) ) {
     		eqList = parser.parse(input);
@@ -24,10 +28,10 @@ public class ValidatedParser extends Parser implements Operators{
     
     // Проверка правильности записи операторов
     public boolean isValidString(String input) throws IllegalArgumentException {
-    	input = spacesRemover.removeSpaces(input);
+    	System.out.println(input + "in method isValidString");
         List<String> eqList = parser.parse(input);
         List<String> unknownsList = parser.getUknownsList();
-        
+        System.out.println(unknownsList);
         if(unknownsList.size() > 0) {
             throw new IllegalArgumentException("Mistake №1 имееются неизвестные символы");
         }
@@ -66,7 +70,7 @@ public class ValidatedParser extends Parser implements Operators{
                 throw new IllegalArgumentException("Mistake №6 отсутствие символа между скобкой и числом"  );
             }
 
-            if( !isUnary(before_previous) &  isBrackOpen(previous) & ( isMathOps(current) )  & isBrackClosed(next) ) {
+            if( !isUnary(before_previous) &  isBrackOpen(previous) & ( isMathOperator(current) )  & isBrackClosed(next) ) {
                 throw new IllegalArgumentException("Mistake №7 число или оператор в скобке"  );
             }
 
@@ -174,8 +178,8 @@ public class ValidatedParser extends Parser implements Operators{
 	}
 
 	@Override
-	public boolean isMathOps(String exp) {
-		return operators.isMathOps(exp);
+	public boolean isMathOperator(String exp) {
+		return operators.isMathOperator(exp);
 	}
 
 	@Override

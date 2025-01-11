@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class OperatorsTest {
 
-    OperatorsFeatures ops = new OperatorsFeatures();
+    AllOperators ops = new AllOperators();
 
     @Test
     void testIsNumberTrue() {

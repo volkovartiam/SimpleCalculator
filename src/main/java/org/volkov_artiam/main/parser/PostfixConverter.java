@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 
-public class PostfixConverter implements Operators{
+public class PostfixConverter implements IOperators{
 
 	ValidatedParser parser = new ValidatedParser();
 
@@ -125,8 +125,8 @@ public class PostfixConverter implements Operators{
 	}
 
 	@Override
-	public boolean isMathOps(String exp) {
-		return parser.isMathOps(exp);
+	public boolean isMathOperator(String exp) {
+		return parser.isMathOperator(exp);
 	}
 
 	@Override

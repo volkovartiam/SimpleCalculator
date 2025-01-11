@@ -1,0 +1,118 @@
+package org.volkov_artiam.main.parser;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class StringPreparer {
+	
+	private String numberPattern = "\\d+";
+	private String dotAndZero = ".0";
+	private String zero = "0";
+	private String dot = ".";
+	List <String> subStrings = new ArrayList<>();
+
+	public String convert(String input) {
+		subStrings.clear();
+		String output = input;
+		while(!output.equals("") ) {
+
+			Matcher matcher = Pattern.compile(numberPattern).matcher(output);
+			boolean isFinded = matcher.find();
+		    if(isFinded) {
+		        int start = matcher.start();
+		        int end = matcher.end();
+		        String finded = output.substring(start, end);
+		        
+				if(end == output.length() ){
+					subStrings.add(output + dotAndZero);
+					output = "";
+		        } 
+				if(end < output.length() ) {
+		        	String before = output.substring(0, end);
+					String next = output.substring(end, end+1);
+		        	
+					/**/
+		        	if(isNumeric(finded) && isNotNumerisAndIsNotDot(next) ) {
+		        		subStrings.add(before + dotAndZero + next);
+		        		output = output.substring(end+1, output.length() );
+		        	}/**/
+		        	
+		        	if((output.length() - end) == 1 ) {
+		        		String after = output.substring(end+1, output.length() );
+			        	if(isNumeric(finded) && isDot(next) ) {
+			        		if(output.length() == 1)
+			        		subStrings.add(before + dotAndZero + after);
+			        		output = "";
+			        	}
+		        	}
+		        	
+		        	if( (output.length() - end) >= 2 ) {
+		        		
+		        		String nextNext = output.substring(end+1, end+2);
+			        	if(isNumeric(finded) && isDot(next) ) {
+			        		if(isNumeric(nextNext) ) {
+				        		subStrings.add(before + next + nextNext);
+				        		output = output.substring(end+2, output.length() );
+				        		if( isNumeric(output)) {
+				        			subStrings.add(output + dotAndZero);
+				        			output = "";
+				        		} else { 
+				        			matcher = Pattern.compile(numberPattern).matcher(output);
+				        			if(matcher.find() ) {
+				        		        start = matcher.start();
+				        		        end = matcher.end();
+				        		        if(start == 0) {
+					        		        subStrings.add(output.substring(start, end) );
+					        		        if(end == output.length()) {
+					        		        	output = "";
+					        		        } else {
+						        		        output = output.substring(end, output.length() );
+					        		        }
+				        		        }
+				        			}
+				        		}
+			        		} else {
+				        		subStrings.add(before + next + zero + nextNext);
+				        		output = output.substring(end+2, output.length() );
+			        		}
+	
+		        		} 
+		        	}
+				}
+				
+		    }else {
+		    	subStrings.add(output);
+		    	output = "";
+		    }
+		}
+		output = "";
+		for (String string : subStrings) {
+			output +=string; 
+		}
+	    return output;
+	}
+
+	
+	private boolean isNotNumerisAndIsNotDot(String str) {
+		return !isNumeric(str) && !isDot(str);
+	}
+	
+	
+	private boolean isDot(String str) {
+		return str.equals(dot);
+	}
+
+	
+	private boolean isNumeric(String str) {
+		try {
+			Double.parseDouble(str);
+			return true;
+		} catch(NumberFormatException e){
+			return false;
+	    }
+	}
+	
+
+}

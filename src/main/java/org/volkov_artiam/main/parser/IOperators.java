@@ -1,8 +1,6 @@
 package org.volkov_artiam.main.parser;
 
-import org.volkov_artiam.operators.Operator;
-
-interface Operators {
+public interface IOperators {
 
     boolean isNumber(String exp);
     
@@ -20,7 +18,7 @@ interface Operators {
     boolean isUnary(String exp);
     boolean isBinary(String exp);
 
-    boolean isMathOps(String exp);
+    boolean isMathOperator(String exp);
     boolean isOperator(String exp);
 
 }
