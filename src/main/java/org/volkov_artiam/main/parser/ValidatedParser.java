@@ -28,6 +28,7 @@ public class ValidatedParser extends Parser implements IOperators{
     
     // Проверка правильности записи операторов
     public boolean isValidString(String input) throws IllegalArgumentException {
+    	input = spacesRemover.removeSpaces(input);
     	System.out.println(input + "in method isValidString");
         List<String> eqList = parser.parse(input);
         List<String> unknownsList = parser.getUknownsList();

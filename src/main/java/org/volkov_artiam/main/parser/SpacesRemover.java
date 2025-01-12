@@ -31,7 +31,7 @@ public class SpacesRemover {
         if (input == null) {
         	throw new NullPointerException("Input is null");
         }
-        if (input.isBlank()) {
+        if (input.equals("")) {
             throw new IllegalArgumentException("Строка пуста");
         }
         if (input.length() > MAX_STRING_SIZE) {
