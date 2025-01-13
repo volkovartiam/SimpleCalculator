@@ -9,4 +9,4 @@
 Для отображения промежуточных шагов требуется нажать "Show steps" <br>
 Значение синуса и косинуса задается в градусах <br>
 
-- SimpleCalculator можно скачать по ссылке [GitHub](https://github.com/volkovartiam/SimpleCalculator/blob/master/src/view/view.PNG?raw=true) <br>
+- SimpleCalculator можно скачать по ссылке [GitHub](https://github.com/volkovartiam/SimpleCalculator/blob/master/target/SimpleCalculator-1.0.1.jar) <br>
