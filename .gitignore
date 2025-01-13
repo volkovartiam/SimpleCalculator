@@ -5,6 +5,10 @@
 !/pom.xml
 
 !/target/SimpleCalculator-1.0.1.jar
+/target
 
+.idea/
+.settings/
 
-
+.project
+.classpath
