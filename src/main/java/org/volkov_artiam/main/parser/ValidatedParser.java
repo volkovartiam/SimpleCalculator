@@ -18,7 +18,7 @@ public class ValidatedParser extends Parser implements IOperators{
     public List<String> parse(String input){
     	input = spacesRemover.removeSpaces(input);
     	input = preparer.convert(input);
-    	System.out.println(input);
+    	//System.out.println(input);
     	List<String> eqList = null;
     	if(isValidString(input) ) {
     		eqList = parser.parse(input);
@@ -29,10 +29,10 @@ public class ValidatedParser extends Parser implements IOperators{
     // Проверка правильности записи операторов
     public boolean isValidString(String input) throws IllegalArgumentException {
     	input = spacesRemover.removeSpaces(input);
-    	System.out.println(input + "in method isValidString");
+    	//System.out.println(input + "in method isValidString");
         List<String> eqList = parser.parse(input);
         List<String> unknownsList = parser.getUknownsList();
-        System.out.println(unknownsList);
+        //System.out.println(unknownsList);
         if(unknownsList.size() > 0) {
             throw new IllegalArgumentException("Mistake №1 имееются неизвестные символы");
         }
@@ -86,6 +86,10 @@ public class ValidatedParser extends Parser implements IOperators{
 
             if( isSin(current)  &  !isBrackOpen(next) ) {
                 throw new IllegalArgumentException("Mistake №9 синус не со скобкой"  );
+            }
+            
+            if( isCos(current)  &  !isBrackOpen(next) ) {
+                throw new IllegalArgumentException("Mistake №9.1 косинус не со скобкой"  );
             }
 
             if( isNumber(current)  &  isUnary(next) ) {
@@ -169,6 +173,11 @@ public class ValidatedParser extends Parser implements IOperators{
 	}
 
 	@Override
+	public boolean isCos(String exp) {
+		return operators.isCos(exp);
+	}
+	
+	@Override
 	public boolean isUnary(String exp) {
 		return operators.isUnary(exp);
 	}
@@ -184,8 +193,8 @@ public class ValidatedParser extends Parser implements IOperators{
 	}
 
 	@Override
-	public boolean isOperator(String exp) {
-		return operators.isOperator(exp);
+	public boolean isInOperatorList(String exp) {
+		return operators.isInOperatorList(exp);
 	}
     
 

@@ -50,6 +50,7 @@ class OperatorsTest {
         actualPatternsList.add("\\/");				// Div
 
         actualPatternsList.add("sin");				// Sin
+        actualPatternsList.add("cos");				// Sin
 
         ArrayList<String> expectedPatternsList = ops.getPatternsList() ;
         assertEquals(expectedPatternsList, actualPatternsList);

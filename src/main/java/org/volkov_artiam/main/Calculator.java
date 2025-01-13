@@ -26,14 +26,14 @@ public class Calculator {
             if(converter.isNumber(eqPart)) {
                 stackDouble.push(Double.parseDouble(eqPart) );
             }
-            else if (converter.isOperator(eqPart) ) {
+            else if (converter.isInOperatorList(eqPart) ) {
                 if(!stackDouble.isEmpty() ) {
                     double first = stackDouble.pop();
 
                     if(converter.isUnary(eqPart) ) {
                         double result = Execute(eqPart, first);
 
-                        addStep(String.valueOf(first), eqPart, "=", String.valueOf(result) );
+                        addStep( eqPart, "(", String.valueOf(first), ")", "=", String.valueOf(result) );
 
                         stackDouble.push(result);
                         counter++;
@@ -90,13 +90,26 @@ public class Calculator {
 
 
     double Execute(String operation, double first) throws IllegalArgumentException {
-        if( converter.isSin(operation) ) {
-            return Math.sin(first);
-        } else {
+    	double answer = 0;
+    	if( converter.isSin(operation) ) {
+    		answer = Math.sin(first * Math.PI/180 );
+            return checkIfSmall(answer);
+        } 
+        if( converter.isCos(operation) ) {
+    		answer = Math.cos(first * Math.PI/180 );
+            return checkIfSmall(answer);
+        } 
+        else {
             throw new IllegalArgumentException("Неизвестное выражение с унарным оператором");
         }
     }
 
+    private double checkIfSmall(double number) {
+		if(Math.abs(number) < 0.000000000000001) {
+			number =  0;
+		}
+		return number;
+    }
     
     public String getAnswer() {
         return answer;

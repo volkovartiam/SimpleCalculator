@@ -35,12 +35,14 @@ public class Parser {
     	setDefaultOperatorsPatterns();
     }
     
-    
     /*
      * Добавить исключение по времени
      * Добавить переопределение toString
      * */
-    List<String> parse(String input) throws IllegalStateException{
+    List<String> parse(String input) throws IllegalStateException, IllegalArgumentException{
+    	if(input.isEmpty() ) {
+    		throw new IllegalArgumentException();
+    	} 
         eqList.clear();
         unknownsList.clear();
     	

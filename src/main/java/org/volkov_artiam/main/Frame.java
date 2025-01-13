@@ -20,7 +20,7 @@ public class Frame extends JFrame {
     JButton btnCalculate = new JButton("Calculate");
 
     boolean showSteps = false;
-
+    private String defaultString = "1.+1+10.0*(12.0-1.*(10.+5)) "+ "\n" +  "+sin(0) +cos(90)";
     Calculator calculator;
 
     public Frame() {
@@ -58,7 +58,7 @@ public class Frame extends JFrame {
         scrollExp.setBounds(10, 30, 280, 70);
         panel.add(scrollExp);
         scrollExp.setViewportView(textAreaExp);
-        textAreaExp.setText("1.0+1.0");
+        textAreaExp.setText(defaultString);
 
         JScrollPane scrollResult = new JScrollPane();
         scrollResult.setBounds(10, 130, 280, 70);

@@ -14,11 +14,12 @@ public interface IOperators {
     boolean isDiv(String exp);
     
     boolean isSin(String exp);
+    boolean isCos(String exp);
 	
     boolean isUnary(String exp);
     boolean isBinary(String exp);
 
     boolean isMathOperator(String exp);
-    boolean isOperator(String exp);
+    boolean isInOperatorList(String exp);
 
 }

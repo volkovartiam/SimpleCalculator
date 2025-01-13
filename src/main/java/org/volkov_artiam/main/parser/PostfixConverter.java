@@ -22,7 +22,7 @@ public class PostfixConverter implements IOperators{
             else if(isBrackOpen(eqPart) ) {
                 stack.push(eqPart);
             }
-            else if(isOperator(eqPart)  && !isBrack(eqPart) ) {
+            else if(isInOperatorList(eqPart)  && !isBrack(eqPart) ) {
                 // проверяем приоритеты текущего оператора и оператора из стека
                 // пока приоритет операции из стека больше или равен считываем из стека
                 int priorityInStack = -1;
@@ -113,6 +113,11 @@ public class PostfixConverter implements IOperators{
 	public boolean isSin(String exp) {
 		return parser.isSin(exp);
 	}
+	
+	@Override
+	public boolean isCos(String exp) {
+		return parser.isCos(exp);
+	}
 
 	@Override
 	public boolean isUnary(String exp) {
@@ -130,8 +135,8 @@ public class PostfixConverter implements IOperators{
 	}
 
 	@Override
-	public boolean isOperator(String exp) {
-		return parser.isOperator(exp);
+	public boolean isInOperatorList(String exp) {
+		return parser.isInOperatorList(exp);
 	}
 
     

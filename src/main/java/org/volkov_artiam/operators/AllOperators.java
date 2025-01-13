@@ -20,9 +20,9 @@ public class AllOperators implements IOperators {
     Operator div = new Div();
 
     Operator sin = new Sin();
-
+    Operator cos = new Cos();
+    
     public AllOperators(){
-        //operators.add(number);
     	operators.add(numberFractional);
 
         operators.add(bracketOpened);
@@ -34,11 +34,11 @@ public class AllOperators implements IOperators {
         operators.add(div);
 
         operators.add(sin);
-
+        operators.add(cos);
     }
 
     public boolean isNumber(String exp) {
-        return /*number.isFindedWithPatternIn(exp) ||*/  numberFractional.isFindedWithPatternIn(exp) ;
+        return numberFractional.isFindedWithPatternIn(exp) ;
     }
 
 
@@ -76,6 +76,10 @@ public class AllOperators implements IOperators {
     public boolean isSin(String exp) {
         return sin.isFindedWithPatternIn(exp);
     }
+    
+    public boolean isCos(String exp) {
+        return cos.isFindedWithPatternIn(exp);
+    }
 
 
     public ArrayList<String> getPatternsList(){
@@ -88,7 +92,7 @@ public class AllOperators implements IOperators {
 
 
     public boolean isUnary(String exp) {
-        boolean isUnary = isSin(exp);
+        boolean isUnary = isSin(exp) || isCos(exp);
         return isUnary;
     }
 
@@ -105,7 +109,7 @@ public class AllOperators implements IOperators {
 
 
 
-    public boolean isOperator(String exp) {
+    public boolean isInOperatorList(String exp) {
         for(Operator operator : operators ) {
             boolean isOperator = operator.isFindedWithPatternIn(exp);
             if(isOperator)  {

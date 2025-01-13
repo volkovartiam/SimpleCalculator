@@ -218,7 +218,7 @@ class ParserTest {
     void isEmpty() {
         String input = "";
         Parser parser = new Parser();
-        //assertThrows( IllegalArgumentException.class, ()-> parser.parse(input));
+        assertThrows( IllegalArgumentException.class, ()-> parser.parse(input));
     }
 
     @Test
